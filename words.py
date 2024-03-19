@@ -33,7 +33,10 @@ def brain(vocabulary):
     random.seed(time.time())  # 현재 시간을 시드로 사용
     shuffled_vocabulary = vocabulary[:]  # 복사본 생성
     random.shuffle(shuffled_vocabulary)  # 단어 순서를 무작위로 섞음
-    for idx, (word, meaning, count) in enumerate(shuffled_vocabulary):
+    
+    while shuffled_vocabulary:
+        word, meaning, count = shuffled_vocabulary.pop(0)  # 리스트에서 단어를 선택하고 리스트에서 제거
+        
         print("-------------------------")
         print("||단어||:", word)
         print("-------------------------")  
@@ -45,13 +48,27 @@ def brain(vocabulary):
         print("-------------------------")
         input("E")  # 사용자가 엔터를 입력하면 다음 단어로 넘어감
         print("\n")
+        print("\n")
+        print("\n")
+        print("\n")
+
+        # 카운트 증가
+        if count is None:
+            count = 1
+        else:
+            count += 1
         
-        
-    
+        # 수정된 단어 정보를 원래의 vocabulary에 반영
+        for idx, (w, m, c) in enumerate(vocabulary):
+            if w == word:
+                vocabulary[idx] = (w, m, count)
+
     print("That was last one")
     exit()
 
     return vocabulary
+
+
 
 
 def match(vocabulary):
@@ -71,26 +88,28 @@ def match(vocabulary):
             print("-------------------------")
             print("****오답입니다.")
             print("-------------------------")
+        
+        #단어와 비교해서 빠진 부분 추가해 나타나게
 
 def main():
     while True:
-        mode = input("*******data, brain, match, !exit***** ")
+        mode = input("***   data, brain, match, !exit  *** ")
         if mode == "data":
             file_path = "C:\\Words_PY\\words_Ex.xlsx"
             data = []
             while True:
-                print("\n")
+
                 print("-------------------------")
-                word = input("***단어를 입력하세요 or exitonnow***        ")
+                word = input("***단어를 입력하세요 or exitonnow***    ")
                 print("-------------------------")
-                print("\n")
+
                 if word == "exitonnow":
                     break
-                print("\n")
+
                 print("-------------------------")
-                meaning = input("***뜻***          ")
+                meaning = input("***뜻***       ")
                 print("-------------------------")
-                print("\n")
+
                 if word.strip() == "" or meaning.strip() == "":
                     print("***null***")
                     continue
@@ -100,6 +119,7 @@ def main():
                 print("\n")
                 print("********데이터가 저장되었습니다*******")
                 print("\n")
+                
         elif mode == "brain":
             file_path = "C:\\Words_PY\\words_Ex.xlsx"
             vocabulary = load_vocabulary(file_path)
@@ -107,6 +127,7 @@ def main():
             input("암기 시작하려면 [Enter]")
             vocabulary = brain(vocabulary)
             save_to_excel(vocabulary, file_path)  # 엑셀 파일에 업데이트된 카운트 저장
+            
         elif mode == "match":
             file_path = "C:\\Words_PY\\words_Ex.xlsx"
             vocabulary = load_vocabulary(file_path)
