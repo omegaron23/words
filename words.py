@@ -23,19 +23,18 @@ def save_to_excel(data, file_path):
     for idx, (word, meaning, count) in enumerate(data, start=sheet.max_row + 1):
         sheet.cell(row=idx, column=1).value = word
         sheet.cell(row=idx, column=2).value = meaning
-  
+        sheet.cell(row=idx, column=3).value = count  # 엑셀 파일에 카운트 값 저장
 
     wb.save(file_path)
 
-
-
-def brain(vocabulary):
+def brain(vocabulary, file_path):
     random.seed(time.time())  # 현재 시간을 시드로 사용
     shuffled_vocabulary = vocabulary[:]  # 복사본 생성
     random.shuffle(shuffled_vocabulary)  # 단어 순서를 무작위로 섞음
+    current_index = 0  # 현재 인덱스 초기화
     
-    while shuffled_vocabulary:
-        word, meaning, count = shuffled_vocabulary.pop(0)  # 리스트에서 단어를 선택하고 리스트에서 제거
+    while current_index < len(shuffled_vocabulary):
+        word, meaning, count = shuffled_vocabulary[current_index]  # 현재 인덱스의 단어 선택
         
         print("-------------------------")
         print("||단어||:", word)
@@ -46,28 +45,29 @@ def brain(vocabulary):
         print("-------------------------")
         print("||뜻||:", meaning)
         print("-------------------------")
-        input("E")  # 사용자가 엔터를 입력하면 다음 단어로 넘어감
-        print("\n")
-        print("\n")
-        print("\n")
-        print("\n")
-
-        # 카운트 증가
-        if count is None:
-            count = 1
-        else:
-            count += 1
         
-        # 수정된 단어 정보를 원래의 vocabulary에 반영
-        for idx, (w, m, c) in enumerate(vocabulary):
-            if w == word:
-                vocabulary[idx] = (w, m, count)
-
-    print("That was last one")
-    exit()
+        option = input("Enter 'y' for next word, 'p' for previous word, or type '!exit' to go back to mode selection: ")
+        
+        if option.lower() == 'y':
+            # count + 1
+            count += 1
+            # 수정된 카운트를 원래의 vocabulary에 반영
+            for idx, (w, m, c) in enumerate(vocabulary):
+                if w == word:
+                    vocabulary[idx] = (w, m, count)
+                    
+            current_index += 1  # 다음 단어로 인덱스 이동
+        elif option.lower() == 'p':
+            current_index = max(0, current_index - 1)  # 이전 단어로 인덱스 이동
+        elif option.lower() == '!exit':
+            print("Exiting brain mode...")
+            # 현재 카운트 값을 엑셀 파일에 저장
+            save_to_excel(vocabulary, file_path)
+            break
+        else:
+            print("Invalid option! Please try again.")
 
     return vocabulary
-
 
 
 
@@ -92,24 +92,21 @@ def match(vocabulary):
         #단어와 비교해서 빠진 부분 추가해 나타나게
 
 def main():
+    file_path = "C:\\Words_PY\\words_Ex.xlsx"  # 파일 경로 설정
     while True:
         mode = input("***   data, brain, match, !exit  *** ")
         if mode == "data":
-            file_path = "C:\\Words_PY\\words_Ex.xlsx"
+            # 데이터 입력 모드
             data = []
             while True:
-
                 print("-------------------------")
                 word = input("***단어를 입력하세요 or exitonnow***    ")
                 print("-------------------------")
-
                 if word == "exitonnow":
                     break
-
                 print("-------------------------")
                 meaning = input("***뜻***       ")
                 print("-------------------------")
-
                 if word.strip() == "" or meaning.strip() == "":
                     print("***null***")
                     continue
@@ -121,15 +118,15 @@ def main():
                 print("\n")
                 
         elif mode == "brain":
-            file_path = "C:\\Words_PY\\words_Ex.xlsx"
+            # 암기 모드
             vocabulary = load_vocabulary(file_path)
             print("총", len(vocabulary), "개의 단어가 로드되었습니다.")
             input("암기 시작하려면 [Enter]")
-            vocabulary = brain(vocabulary)
+            vocabulary = brain(vocabulary, file_path)  # file_path를 함께 전달
             save_to_excel(vocabulary, file_path)  # 엑셀 파일에 업데이트된 카운트 저장
             
         elif mode == "match":
-            file_path = "C:\\Words_PY\\words_Ex.xlsx"
+            # 맞추기 모드
             vocabulary = load_vocabulary(file_path)
             print("총", len(vocabulary), "개의 단어가 로드되었습니다.")
             input("맞추기 퀴즈를 시작하려면 [Enter]를 누르세요.")
