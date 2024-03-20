@@ -96,7 +96,7 @@ def main():
     while True:
         mode = input("***   data, brain, match, !exit  *** ")
         if mode == "data":
-            # 데이터 입력 모드
+            file_path = "C:\\Words_PY\\words_Ex.xlsx"
             data = []
             while True:
                 print("-------------------------")
@@ -110,7 +110,8 @@ def main():
                 if word.strip() == "" or meaning.strip() == "":
                     print("***null***")
                     continue
-                data.append((word, meaning, 0))  # 카운트 0으로 초기화
+                # 카운트를 1로 설정하여 데이터에 추가
+                data.append((word, meaning, 1))  # 카운트 1으로 초기화
             if data:
                 save_to_excel(data, file_path)
                 print("\n")
