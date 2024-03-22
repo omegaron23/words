@@ -29,22 +29,22 @@ def save_to_excel(data, file_path):
 
 def brain(vocabulary, file_path):
     random.seed(time.time())  # 현재 시간을 시드로 사용
-    shuffled_vocabulary = vocabulary[:]  # 복사본 생성
-    random.shuffle(shuffled_vocabulary)  # 단어 순서를 무작위로 섞음
+    vocabulary.sort(key=lambda x: x[2])  # 카운트가 낮은 순서로 정렬
     current_index = 0  # 현재 인덱스 초기화
     
-    while current_index < len(shuffled_vocabulary):
-        word, meaning, count = shuffled_vocabulary[current_index]  # 현재 인덱스의 단어 선택
+    while current_index < len(vocabulary):
+        word, meaning, count = vocabulary[current_index]  # 현재 인덱스의 단어 선택
         
         print("-------------------------")
         print("||단어||:", word)
         print("-------------------------")  
         input("Enter")  # 사용자가 엔터를 입력하면 뜻이 출력됨
         
-        print("\n")
         print("-------------------------")
         print("||뜻||:", meaning)
         print("-------------------------")
+        print("\n")
+        print("\n")
         
         option = input("Enter 'y' for next word, 'p' for previous word, or type '!exit' to go back to mode selection: ")
         
@@ -68,8 +68,6 @@ def brain(vocabulary, file_path):
             print("Invalid option! Please try again.")
 
     return vocabulary
-
-
 
 def match(vocabulary):
     random.seed(time.time())
@@ -122,6 +120,7 @@ def main():
             # 암기 모드
             vocabulary = load_vocabulary(file_path)
             print("총", len(vocabulary), "개의 단어가 로드되었습니다.")
+           
             input("암기 시작하려면 [Enter]")
             vocabulary = brain(vocabulary, file_path)  # file_path를 함께 전달
             save_to_excel(vocabulary, file_path)  # 엑셀 파일에 업데이트된 카운트 저장
