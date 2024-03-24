@@ -102,6 +102,9 @@ def main():
                 print("-------------------------")
                 if word == "exitonnow":
                     break
+                if not word.isalpha():  # 입력된 단어가 영어 알파벳으로만 구성되었는지 확인
+                    print("영어 알파벳만 입력하세요.")
+                    continue
                 print("-------------------------")
                 meaning = input("***뜻***       ")
                 print("-------------------------")
@@ -115,7 +118,7 @@ def main():
                 print("\n")
                 print("********데이터가 저장되었습니다*******")
                 print("\n")
-                
+
         elif mode == "brain":
             # 암기 모드
             vocabulary = load_vocabulary(file_path)
