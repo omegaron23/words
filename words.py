@@ -110,13 +110,13 @@ def match(vocabulary):
         
 
 def main():
-    file_path = "C:\\Words_PY\\words_Ex.xlsx"  # 파일 경로 설정
+    file_path = "C:\\english\\words_Ex.xlsx"  # 파일 경로 설정
     
     while True:
         mode = input("***   data, brain, match, !exit  *** ")
         
         if mode == "data":
-            file_path = "C:\\Words_PY\\words_Ex.xlsx"
+            file_path = "C:\\english\\words_Ex.xlsx"
             data = []
             
             while True:
