@@ -60,5 +60,5 @@ def remove_duplicates(file_path):
     wb.save(file_path)
 
 # Example usage:
-file_path = 'C:\\Words_PY\\words_EX.xlsx'
+file_path = 'C:\\english\\words_EX.xlsx'
 remove_duplicates(file_path)
